@@ -4,14 +4,29 @@ import { ClipboardText, PlusCircle } from "phosphor-react";
 import styles from "./Task.module.css";
 import { TaskList } from "../TaskList/TaskList";
 
+import { v4 as uuidv4 } from "uuid";
+
+interface Tarefa {
+  id: string;
+  isComplete: boolean;
+  newTask: string;
+}
+
 export function Task() {
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Tarefa[]>([]);
   const [newTask, setNewTask] = useState("");
 
   function handleCreateNewTask(event: FormEvent) {
     event.preventDefault();
 
-    setTasks([...tasks, newTask]);
+    setTasks([
+      ...tasks,
+      {
+        id: uuidv4(),
+        isComplete: false,
+        newTask,
+      },
+    ]);
 
     setNewTask("");
   }
@@ -19,6 +34,14 @@ export function Task() {
   function handleNewTask(event: ChangeEvent<HTMLInputElement>) {
     event.target.setCustomValidity("");
     setNewTask(event.target.value);
+  }
+
+  function deleteTask(taskToBeDelete: string) {
+    const tasksWithoutDelete = tasks.filter((task) => {
+      return task.newTask != taskToBeDelete;
+    });
+
+    setTasks(tasksWithoutDelete);
   }
 
   return (
@@ -30,6 +53,7 @@ export function Task() {
             placeholder="Add a new task"
             value={newTask}
             onChange={handleNewTask}
+            required
           />
           <button type="submit">
             Add
@@ -62,7 +86,13 @@ export function Task() {
           </>
         ) : (
           tasks.map((task) => {
-            return <TaskList content={task} />;
+            return (
+              <TaskList
+                key={task.id}
+                content={task.newTask}
+                onDeleteTask={deleteTask}
+              />
+            );
           })
         )}
       </div>

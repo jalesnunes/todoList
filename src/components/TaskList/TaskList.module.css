@@ -1,5 +1,5 @@
 .card {
-  overflow: hidden;
+  overflow: auto;
   height: 5rem;
   background: var(--gray-500);
   margin-bottom: 1rem;
@@ -11,6 +11,11 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
+  
+}
+
+.card::-webkit-scrollbar {
+  width: 1px;
 }
 
 .card button {
@@ -22,6 +27,8 @@
 .card p {
   color: var(--gray-100);
   font-weight: 400;
+  
+  text-align: center;
 }
 
 .trash {
