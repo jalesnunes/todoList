@@ -7,27 +7,36 @@ import checkedImg from "../../assets/checked.svg";
 
 interface TaskListProps {
   content: string;
-  onDeleteTask: (task: string) => void
+  isComplete: boolean;
+  id: string;
+  onDeleteTask: (task: string) => void;
+  onCompleteTask: (id: string) => void;
 }
 
-export function TaskList({ content, onDeleteTask }: TaskListProps) {
-
+export function TaskList({ content, isComplete, id, onDeleteTask, onCompleteTask }: TaskListProps) {
   function handleDeleteTask() {
-    onDeleteTask(content)
+    onDeleteTask(content);
+  }
+
+  function handleCompleteTask() {
+    onCompleteTask(id)
   }
 
   return (
     <div className={styles.cards}>
       <div className={styles.card}>
-        <button>
-          <img src={checkImg} alt="" />
+        <button onClick={handleCompleteTask}>
+          {!isComplete ? (
+            <img src={checkImg} alt="" />
+          ) : (
+            <img src={checkedImg} alt="" />
+          )}
         </button>
-        <p>{content}</p>
+        <p className={!isComplete ? styles.taskNotComplete : styles.taskComplete}>
+          {content}
+        </p>
         <button className={styles.trash}>
-          <Trash 
-            size={24}
-            onClick={handleDeleteTask} 
-          />
+          <Trash size={24} onClick={handleDeleteTask} />
         </button>
       </div>
     </div>

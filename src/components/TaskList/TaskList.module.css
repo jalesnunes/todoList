@@ -24,11 +24,18 @@
   border: none;
 }
 
-.card p {
+.taskNotComplete {
   color: var(--gray-100);
   font-weight: 400;
   
   text-align: center;
+}
+
+.taskComplete {
+  color: var(--gray-300);
+  font-weight: 400;
+  text-align: center;
+  text-decoration: line-through;
 }
 
 .trash {

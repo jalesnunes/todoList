@@ -6,15 +6,19 @@ import { TaskList } from "../TaskList/TaskList";
 
 import { v4 as uuidv4 } from "uuid";
 
-interface Tarefa {
+interface Task {
   id: string;
   isComplete: boolean;
   newTask: string;
 }
 
 export function Task() {
-  const [tasks, setTasks] = useState<Tarefa[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
+
+  const countedTasksCompleted = tasks.filter(task => {
+    return task.isComplete !== false
+  })
 
   function handleCreateNewTask(event: FormEvent) {
     event.preventDefault();
@@ -44,6 +48,18 @@ export function Task() {
     setTasks(tasksWithoutDelete);
   }
 
+  function completeTask(id: string) {
+    const newTaskCompleted = tasks.map((task) => {
+      if(task.id === id) {
+        task.isComplete = !task.isComplete
+      }
+
+      return task
+    })
+
+    setTasks(newTaskCompleted)
+  }
+
   return (
     <div>
       <div className={styles.form}>
@@ -71,7 +87,11 @@ export function Task() {
 
           <div className={styles.completed}>
             <strong>Completed</strong>
-            <span>0 of {tasks.length}</span>
+            <span>
+                { countedTasksCompleted.length } 
+                 {' '}of{' '} 
+                { tasks.length }
+              </span>
           </div>
         </header>
 
@@ -90,7 +110,10 @@ export function Task() {
               <TaskList
                 key={task.id}
                 content={task.newTask}
+                isComplete={task.isComplete}
                 onDeleteTask={deleteTask}
+                onCompleteTask={completeTask}
+                id={task.id}
               />
             );
           })
